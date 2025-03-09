@@ -1,0 +1,44 @@
+@startuml
+hide empty description
+
+state compiler as "compiler.c"
+state compiler_h as "compiler.h"
+state parser_h as "parser.h"
+state scanner_h as "scanner.h"
+state node_h as "node.h"
+state symbol_h as "symbol.h"
+state type_h as "type.h"
+state ir_h as "ir.h"
+state mips_h as "mips.h"
+state parser_tab_h as "parser.tab.h"
+
+state flex as "Flex" #lightgreen
+state bison as "Bison" #lightblue
+
+state scanner_yyh as "scanner.yy.h"
+
+compiler --> compiler_h
+compiler --> parser_h
+compiler --> scanner_h
+compiler --> node_h
+compiler --> symbol_h
+compiler --> type_h
+compiler --> ir_h
+compiler --> mips_h
+
+node_h --> compiler_h
+node_h --> parser_tab_h
+
+parser_h --> scanner_yyh
+
+scanner_h --> parser_h
+scanner_h --> scanner_yyh
+
+symbol_h --> compiler_h
+
+compiler_h : YYLTYPE\nYYSTYPE\ncompiler_print_error
+
+flex -[dashed]> scanner_yyh : produces
+bison -[dashed]> parser_tab_h : produces
+
+@enduml
